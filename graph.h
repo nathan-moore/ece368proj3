@@ -7,7 +7,7 @@ typedef struct _Node Node;
 //done so I only have to calculate distance at most once
 //distance populated upon demand
 typedef struct _Edge{
-	unsigned int count;
+	unsigned int index;
 	int distance;
 }Edge;
 
@@ -17,6 +17,7 @@ typedef struct _Node{
 	int x;
 	int y;
 	unsigned int edge_count;
+	unsigned int edge_size;
 	Edge* edges;
 }Node;
 

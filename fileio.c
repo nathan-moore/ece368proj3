@@ -2,6 +2,9 @@
 #include <stdlib.h>
 
 #include "graph.h"
+#include "fileio.h"
+
+void _SetEdge(Node* nodes,int from,int to);
 
 Node* readGraph(char* MapName)
 {
@@ -50,11 +53,65 @@ Node* readGraph(char* MapName)
 		nodes[index].y = y_cord;
 	}
 
-	EdgeTempSize = (edge_cnt / nodes + EDGEBUFFER);
-    Edge* EdgeTemp = malloc(sizeof(*temp) * EdgeTempSize);
+	unsigned int EdgeTempSize = (edge_cnt / vertex_cnt + EDGEBUFFER);
+	for(unsigned int i = 0; i < vertex_cnt;i++)
+	{
+		nodes[i].edges = malloc(sizeof(*nodes[i].edges) * EdgeTempSize);
 
+		if(nodes[i].edges == NULL)
+		{
+			fprintf(stderr,"Error with malloc\n");
+		}
+		nodes[i].edge_size = EdgeTempSize;
+		nodes[i].edge_count = 0;
+	}
+	
 	for(unsigned int i = 0;i < edge_cnt;i++)
 	{
-		
+		int Edge1,Edge2;
+		read = fscanf(map,"%i %i",&Edge1,&Edge2);
+		if(read != 2)
+		{
+			printf("Error reading the edges from the file");
+			return NULL;
+		}
+
+		if(Edge1 >= vertex_cnt)
+		{
+			fprintf(stderr,"Error with file %i is too large\n",Edge1);
+		}
+		else if (Edge2 >= vertex_cnt)
+		{
+			fprintf(stderr,"Error with file %i is too large\n",Edge2);
+		}
+		else
+		{
+			_SetEdge(nodes,Edge1,Edge2);
+			_SetEdge(nodes,Edge2,Edge1);
+		}
+	}
+
+	return nodes;
+}
+
+void _SetEdge(Node* nodes,int from,int to)
+{
+	nodes[from].edges[nodes[from].edge_count].index = to;
+	nodes[from].edges[nodes[from].edge_count].distance = -1;
+	
+	nodes[from].edge_count += 1;
+	if(nodes[from].edge_count == nodes[from].edge_size)
+	{
+		nodes[from].edges = realloc(nodes[from].edges,nodes[from].edge_size * EDGEGROWTH);
+		nodes[from].edge_size = nodes[from].edge_size * EDGEGROWTH;
+		if(DEBUG == 1)
+		{
+			printf("resized edge array\n");
+		}
+		if(nodes[from].edges == NULL)
+		{
+			fprintf(stderr,"Realloc failed\n");
+			exit(EXIT_FAILURE);
+		}
 	}
 }
