@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "graph.h"
 #include "fileio.h"
 
@@ -49,6 +48,11 @@ Node* readGraph(char* MapName)
 			return NULL;
 		}
 
+		if(i != index)
+		{
+			printf("Error matching node %d. Acual is %d.\n",i,index);
+		}
+		
 		nodes[index].x = x_cord;
 		nodes[index].y = y_cord;
 	}
@@ -91,6 +95,13 @@ Node* readGraph(char* MapName)
 		}
 	}
 
+	int Error_checking;
+	read = fscanf(map,"%i",&Error_checking);
+	if(read != EOF)
+	{
+		printf("Error, data remaining after reading in the file\n");
+	}
+	
 	return nodes;
 }
 
@@ -102,8 +113,8 @@ void _SetEdge(Node* nodes,int from,int to)
 	nodes[from].edge_count += 1;
 	if(nodes[from].edge_count == nodes[from].edge_size)
 	{
-		nodes[from].edges = realloc(nodes[from].edges,nodes[from].edge_size * EDGEGROWTH);
-		nodes[from].edge_size = nodes[from].edge_size * EDGEGROWTH;
+		nodes[from].edges = realloc(nodes[from].edges,(nodes[from].edge_size * EDGEGROWTH + 1) * sizeof(*nodes[from].edges));
+		nodes[from].edge_size = nodes[from].edge_size * EDGEGROWTH + 1;
 		if(DEBUG == 1)
 		{
 			printf("resized edge array\n");

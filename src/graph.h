@@ -18,6 +18,7 @@ typedef struct _Node{
 	int y;
 	unsigned int edge_count;
 	unsigned int edge_size;
+	int last_visit;
 	Edge* edges;
 }Node;
 
