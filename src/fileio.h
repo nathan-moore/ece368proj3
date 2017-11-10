@@ -11,6 +11,11 @@
 
 #define DEBUG 1
 
-Node* readGraph(char* MapName);
+typedef struct _Graph{
+	Node* graph;
+	int nodeCnt;
+}Graph;
+
+Graph* readGraph(char* MapName);
 
 #endif

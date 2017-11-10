@@ -11,7 +11,7 @@ CSOURCE = graph.c fileio.c main.c
 COBJ = $(CSOURCE:.c=.o)
 OBJ = $(patsubst %,$(ODIR)/%,$(COBJ))
 
-.PHONY:clean all ca usa 5x5
+.PHONY:clean cleanAll all ca usa 5x5
 
 all: shortestpath
 
@@ -33,4 +33,6 @@ usa:shortestpath
 clean:
 	rm -f *~
 	rm -f shortestpath
-	rm -f $(ODIR)/*.o
+
+cleanAll:clean
+	rm -f $(ODIR)/*

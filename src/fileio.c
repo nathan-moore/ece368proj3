@@ -5,7 +5,7 @@
 
 void _SetEdge(Node* nodes,int from,int to);
 
-Node* readGraph(char* MapName)
+Graph* readGraph(char* MapName)
 {
 	FILE* map = fopen(MapName,"r");
 	if(map == NULL)
@@ -101,8 +101,12 @@ Node* readGraph(char* MapName)
 	{
 		printf("Error, data remaining after reading in the file\n");
 	}
+
+	Graph* graph = malloc(sizeof(*graph));
+	graph -> graph = nodes;
+	graph -> nodeCnt = vertex_cnt;
 	
-	return nodes;
+	return graph;
 }
 
 void _SetEdge(Node* nodes,int from,int to)
