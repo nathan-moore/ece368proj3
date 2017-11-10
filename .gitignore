@@ -52,6 +52,4 @@ Mkfile.old
 dkms.conf
 
 *~
-map/*
-obj/*
 *pdf
