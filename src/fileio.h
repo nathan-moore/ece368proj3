@@ -11,24 +11,15 @@
 
 #define DEBUG 1
 
-typedef struct _Graph{
-	Node* graph;
-	int nodeCnt;
-}Graph;
-
-typedef struct _Query{
-	int start;
-	int finish;
-}Query;
-
 typedef struct _QStruct{
 	FILE* fp;
 	int cnt;
+	Query q;
 }QStruct;
 
 Graph* readGraph(char* MapName);
-Qstruct initQToken(char* fn);
-Query* nextQuery(QStruct* q);
+QStruct* initQToken(char* fn,Query** q);
+int nextQuery(QStruct* q);
 void freeQuery(QStruct* q);
 
 #endif

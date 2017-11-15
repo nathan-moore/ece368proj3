@@ -18,14 +18,17 @@ int main(int argc,char** argv)
 		return EXIT_FAILURE;
 	}
 
-	QStruct* qstruct = initQToken(argv[2]);
+	Query* query;
+	QStruct* qstruct = initQToken(argv[2],&query);
 	for(unsigned int i = 0;i < qstruct -> cnt;i++)
 	{
-		Query* query = nextQuery(qstruct);
-		if(query == NULL)
+		int error = nextQuery(qstruct);
+		if(error == 1)
 		{
 			exit(EXIT_FAILURE);
 		}
-		char* path = findPath(query,graph);
+
+		findPath(query,graph);
+
 	}
 }

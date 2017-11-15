@@ -22,6 +22,16 @@ typedef struct _Node{
 	Edge* edges;
 }Node;
 
+typedef struct _Graph{
+	Node* graph;
+	int nodeCnt;
+}Graph;
 
+typedef struct _Query{
+	int start;
+	int finish;
+}Query;
+
+void findPath(Query* query,Graph* graph);
 
 #endif
