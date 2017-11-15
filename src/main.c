@@ -14,19 +14,18 @@ int main(int argc,char** argv)
 	Graph* graph = readGraph(argv[1]);
 	if(graph == NULL)
 	{
-		printf("Could not open the file\n");
+		printf("Error reading from file\n");
 		return EXIT_FAILURE;
 	}
 
-	Node* nodes = graph -> graph;
-	
-	for(int i = 0;i < 10;i++)
+	QStruct* qstruct = initQToken(argv[2]);
+	for(unsigned int i = 0;i < qstruct -> cnt;i++)
 	{
-		printf("%i %i %i\n",nodes[i].x,	nodes[i].y,	nodes[i].edge_count);
-		for(int j = 0;j < nodes[i].edge_count;j++)
+		Query* query = nextQuery(qstruct);
+		if(query == NULL)
 		{
-			printf("%u %i\n",nodes[i].edges[j].index,nodes[i].edges[j].distance);
+			exit(EXIT_FAILURE);
 		}
-		printf("\n\n");
+		char* path = findPath(query,graph);
 	}
 }

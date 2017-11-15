@@ -16,6 +16,19 @@ typedef struct _Graph{
 	int nodeCnt;
 }Graph;
 
+typedef struct _Query{
+	int start;
+	int finish;
+}Query;
+
+typedef struct _QStruct{
+	FILE* fp;
+	int cnt;
+}QStruct;
+
 Graph* readGraph(char* MapName);
+Qstruct initQToken(char* fn);
+Query* nextQuery(QStruct* q);
+void freeQuery(QStruct* q);
 
 #endif

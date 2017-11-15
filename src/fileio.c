@@ -130,3 +130,35 @@ void _SetEdge(Node* nodes,int from,int to)
 		}
 	}
 }
+
+QStruct* initQToken(char* fn)
+{
+	QStruct* rtn = malloc(sizeof(*rtn));
+	if(rtn == NULL)
+	{
+		fprintf(stderr,"Error with malloc");
+		free(rtn);
+		return EXIT_FAILURE;
+	}
+	rtn -> fp = fopen(fn,"r");
+	int count = fscanf(rtn -> fp,"%d",&(rtn -> cnt));
+	return rtn;
+}
+
+Query* nextQuery(QStruct* q)
+{
+	Query* rtn = malloc(sizeof(*rtn));
+	int count= fscanf(q -> fp,"%d %d",&(rtn -> start),&(rtn -> finish));
+	if (count != 2)
+	{
+		free(rtn);
+		return NULL;
+	}
+	return rtn;
+}
+
+void freeQuery(QStruct* q)
+{
+	fclose(q -> fp);
+	free(q);
+}
