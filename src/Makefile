@@ -10,8 +10,8 @@ $(shell mkdir -p $(ODIR) >/dev/null)
 $(shell mkdir -p $(DEPDIR) >/dev/null)
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.Td
 
-HEADERS = graph.h fileio.h
-CSOURCE = graph.c fileio.c main.c
+HEADERS = graph.h fileio.h utility.h
+CSOURCE = graph.c fileio.c main.c utility.c
 COBJ = $(CSOURCE:.c=.o)
 OBJ = $(patsubst %,$(ODIR)/%,$(COBJ))
 
