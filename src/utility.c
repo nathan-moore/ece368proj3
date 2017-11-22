@@ -1,11 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "utility.h"
 #include "graph.h"
 
-void _DownHoleHead(Heap* heap);
-void _upHeap(Heap* heap);
+void _DownHeap(Heap* heap,int current);
+void _upHeap(Heap* heap,int current);
+
+//TODO inline these 3 functions
+int nodeCmp(Node* node1,Node* node2);
+int _getLeftChild(int parrent);
+int _getRightChild(int parrent);
 
 Heap* pQueueInit(unsigned int size)
 {
@@ -36,17 +42,63 @@ int pop(Heap* heap,Node** toSet)
 	{
 		return 0;
 	}
-	
-	Node* rtn = heap -> heap[0];
 
-	_DownHoleHead(heap);
+	Node* rtn = heap -> heap[0];
+	heap -> last -= 1;
+	heap -> heap[0] = heap -> heap[heap -> last];
+
+	_DownHeap(heap,0);
 	*toSet = rtn;
 	return 1;
 }
 
-//TODO? Look up/figure out how to do
-void _DownHoleHead(Heap* heap)
+//TODO test this
+//does down heap on
+void _DownHeap(Heap* heap,int current)
 {
+	Node** heap_arr = heap -> heap;
+	int left_child = _getLeftChild(current);
+	int right_child = _getRightChild(current);
+	bool flag = false;
+	do
+	{
+		flag = false;
+		//prioritises the left branch first
+		while(nodeCmp(heap_arr[current],heap_arr[left_child]) >= 0)
+		{
+			int location = nodeCmp(heap_arr[left_child],heap_arr[right_child]);
+			if(location >= 0)
+			{
+				Node* temp = heap_arr[current];
+				heap_arr[current] = heap_arr[left_child];
+				heap_arr[left_child] = temp;
+				current = left_child;
+				left_child = _getLeftChild(current);
+				right_child = _getRightChild(current);
+			}
+			else
+			{
+				Node* temp = heap_arr[current];
+				heap_arr[current] = heap_arr[right_child];
+				heap_arr[right_child] = temp;
+				current = right_child;
+				left_child = _getLeftChild(current);
+				right_child = _getRightChild(current);
+			}
+		}
+		//if you can swap on the right branch but not the left
+		if(nodeCmp(heap_arr[current],heap_arr[right_child]) >= 0)
+		{
+			Node* temp = heap_arr[current];
+			heap_arr[current] = heap_arr[right_child];
+			heap_arr[right_child] = temp;
+			current = right_child;
+			left_child = _getLeftChild(current);
+			right_child = _getRightChild(current);
+			flag = true;
+		}
+	}while(flag == true);
+
 	return;
 }
 
@@ -57,12 +109,12 @@ int addQueue(Heap* heap,Node* toAdd)
 		return 0;
 	}
 	heap -> heap[heap -> last] = toAdd;
+	_upHeap(heap,heap -> last);
 	heap -> last += 1;
-	_upHeap(heap);
 	return 1;
 }
 
 int popAndReplace(Heap* heap,Node* toAdd,Node** rtn)
 {
-	
+	return 1;
 }
