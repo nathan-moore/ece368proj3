@@ -3,15 +3,22 @@
 
 #include "graph.h"
 
+typedef struct _data{
+	int node;
+	int distance;
+}data;
+
 typedef struct _Heap{
 	unsigned int size;
 	unsigned int last;
-	Node** heap;
+	data* heap;
 }Heap;
 
+
+
 Heap* pQueueInit(unsigned int size);
-int pop(Heap* heap,Node** toSet);
-int addQueue(Heap* Heap,Node* toAdd)__attribute__((nonnull));
-int popAndReplace(Heap* heap,Node* toAdd,Node** rtn)__attribute__((nonnull));
+int pop(Heap* heap,data* toSet);
+int addQueue(Heap* Heap,int node, int distance)__attribute__((nonnull));
+int popAndReplace(Heap* heap,int node,int distance,data* rtn)__attribute__((nonnull));
 
 #endif

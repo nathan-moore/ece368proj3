@@ -8,10 +8,12 @@
 void _DownHeap(Heap* heap,int current);
 void _upHeap(Heap* heap,int current);
 
-//TODO inline these 3 functions
-int nodeCmp(Node* node1,Node* node2);
-int _getLeftChild(int parrent);
-int _getRightChild(int parrent);
+//TODO inline these 5 functions
+static inline int nodeCmp(data node1,data node2);
+static inline int _getLeftChild(int parent);
+static inline int _getRightChild(int parent);
+static inline void _swap(data* n1,data* n2);
+static inline int _getParent(int child);
 
 Heap* pQueueInit(unsigned int size)
 {
@@ -21,34 +23,56 @@ Heap* pQueueInit(unsigned int size)
 		fprintf(stderr,"Error with malloc\n");
 		exit(EXIT_FAILURE);
 	}
-	rtn -> heap = malloc(sizeof(*rtn -> heap) * size);
+	rtn -> heap = malloc(sizeof(*rtn -> heap) * (1 + size));
 	if(rtn -> heap == NULL)
 	{
 		fprintf(stderr,"Error in malloc\n");
 		exit(EXIT_FAILURE);
 	}
 
-	rtn -> size = size;
-	rtn -> last = 0;
+	rtn -> size = size + 1;
+	rtn -> last = 1;//starts at 1 for math simplicity
 
 	return rtn;
 }
 
 //return 0 if the queue is empy
 //returns 1 on success
-int pop(Heap* heap,Node** toSet)
+int pop(Heap* heap,data* toSet)
 {
-	if(heap -> last == 0)
+	if(heap -> last <= 1)
 	{
 		return 0;
 	}
 
-	Node* rtn = heap -> heap[0];
+	*toSet = heap -> heap[1];
 	heap -> last -= 1;
-	heap -> heap[0] = heap -> heap[heap -> last];
+	heap -> heap[1] = heap -> heap[heap -> last];
 
-	_DownHeap(heap,0);
-	*toSet = rtn;
+	_DownHeap(heap,1);
+	return 1;
+}
+
+int addQueue(Heap* heap,int node,int distance)
+{
+	if(heap -> last == heap -> size)
+	{
+		return 0;
+	}
+	heap -> heap[heap -> last].node = node;
+	heap -> heap[heap -> last].distance = distance;
+	heap -> last += 1;
+
+	_upHeap(heap,heap -> last - 1);
+	return 1;
+}
+
+int popAndReplace(Heap* heap,int node,int distance,data* rtn)
+{
+	*rtn = heap -> heap[1];
+	heap -> heap[1].node = node;
+	heap -> heap[1].distance = distance;
+	_DownHeap(heap,1);
 	return 1;
 }
 
@@ -56,7 +80,7 @@ int pop(Heap* heap,Node** toSet)
 //does down heap on
 void _DownHeap(Heap* heap,int current)
 {
-	Node** heap_arr = heap -> heap;
+	data* heap_arr = heap -> heap;
 	int left_child = _getLeftChild(current);
 	int right_child = _getRightChild(current);
 	bool flag = false;
@@ -64,34 +88,28 @@ void _DownHeap(Heap* heap,int current)
 	{
 		flag = false;
 		//prioritises the left branch first
-		while(nodeCmp(heap_arr[current],heap_arr[left_child]) >= 0)
+		while(right_child < heap -> last && nodeCmp(heap_arr[current],heap_arr[left_child]) >= 0)
 		{
 			int location = nodeCmp(heap_arr[left_child],heap_arr[right_child]);
-			if(location >= 0)
+			if(location <= 0)
 			{
-				Node* temp = heap_arr[current];
-				heap_arr[current] = heap_arr[left_child];
-				heap_arr[left_child] = temp;
+				_swap(&heap_arr[current],&heap_arr[left_child]);
 				current = left_child;
 				left_child = _getLeftChild(current);
 				right_child = _getRightChild(current);
 			}
 			else
 			{
-				Node* temp = heap_arr[current];
-				heap_arr[current] = heap_arr[right_child];
-				heap_arr[right_child] = temp;
+				_swap(&heap_arr[current],&heap_arr[right_child]);
 				current = right_child;
 				left_child = _getLeftChild(current);
 				right_child = _getRightChild(current);
 			}
 		}
 		//if you can swap on the right branch but not the left
-		if(nodeCmp(heap_arr[current],heap_arr[right_child]) >= 0)
+		if(right_child < heap -> last && (nodeCmp(heap_arr[current],heap_arr[right_child]) >= 0))
 		{
-			Node* temp = heap_arr[current];
-			heap_arr[current] = heap_arr[right_child];
-			heap_arr[right_child] = temp;
+			_swap(&heap_arr[current],&heap_arr[right_child]);
 			current = right_child;
 			left_child = _getLeftChild(current);
 			right_child = _getRightChild(current);
@@ -102,19 +120,41 @@ void _DownHeap(Heap* heap,int current)
 	return;
 }
 
-int addQueue(Heap* heap,Node* toAdd)
+void _upHeap(Heap* heap,int current)
 {
-	if(heap -> last == heap -> size)
+	data* heap_arr = heap -> heap;
+	int parent = _getParent(current);
+	while(parent >= 1 && (nodeCmp(heap_arr[parent],heap_arr[current]) > 0))
 	{
-		return 0;
+		_swap(&heap_arr[parent],&heap_arr[current]);
+		current = parent;
+		parent = _getParent(current);
 	}
-	heap -> heap[heap -> last] = toAdd;
-	_upHeap(heap,heap -> last);
-	heap -> last += 1;
-	return 1;
 }
 
-int popAndReplace(Heap* heap,Node* toAdd,Node** rtn)
+static inline int nodeCmp(data node1,data node2)
 {
-	return 1;
+	return node1.distance - node2.distance;
+}
+
+static inline int _getLeftChild(int parent)
+{
+	return (parent * 2);
+}
+
+static inline int _getRightChild(int parent)
+{
+	return (parent * 2) + 1;
+}
+
+static inline void _swap(data* n1,data* n2)
+{
+	data temp = *n1;
+	*n1 = *n2;
+	*n2 = temp;
+}
+
+static inline int _getParent(int child)
+{
+	return child / 2;
 }

@@ -5,18 +5,24 @@ ODIR :=../obj
 MAPDIR :=../map
 QUERYDIR :=../query
 DEPDIR := .d
+TESTDIR := ../tests
 
 $(shell mkdir -p $(ODIR) >/dev/null)
 $(shell mkdir -p $(DEPDIR) >/dev/null)
-DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.Td
+DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$(notdir $*).Td
 
-HEADERS = graph.h fileio.h utility.h
-CSOURCE = graph.c fileio.c main.c utility.c
-COBJ = $(CSOURCE:.c=.o)
-OBJ = $(patsubst %,$(ODIR)/%,$(COBJ))
+HEADERS := graph.h fileio.h utility.h
+CSOURCE := graph.c fileio.c main.c utility.c
+TESTS := priorityqueue.c
+COBJ := $(CSOURCE:.c=.o)
+OBJ := $(patsubst %,$(ODIR)/%,$(COBJ))
+TEST := $(patsubst %,$(ODIR)/%,$(TESTS))
+OBJTEST := $(TEST:.c=.o)
+
+SOURCES = $(CSOURCE) $(patsubst %,_%,$(notdir $(TESTS)))
 
 COMPILE.c = $(CC) $(DEPFLAGS) $(CFLAGS) -c
-POSTCOMPILE = @mv -f $(DEPDIR)/$*.Td $(DEPDIR)/$*.d && touch $@
+POSTCOMPILE = @mv -f $(DEPDIR)/$(notdir $(notdir $*)).Td $(DEPDIR)/$(notdir $*).d && touch $@
 
 #gets given files if I don't currently have them
 MAPFILES = map5x5.txt roadCA.txt usa.txt
@@ -25,7 +31,7 @@ PROVMAP = $(addprefix $(MAPDIR)/,$(MAPFILES))
 PROVQUERY = $(addprefix $(QUERYDIR)/,$(QUERYFILES))
 
 
-WGET = wget -A txt -m -p -E -k -K -mp 
+WGET = wget -A txt -m -p -E -k -K -mp
 FILE = ftp.ecn.purdue.edu/xzl/inv/ece368-f17/proj3
 SITE = ftp://$(FILE)
 CLEANUP = rm -rf ftp.ecn.purdue.edu
@@ -34,13 +40,25 @@ CLEANUP = rm -rf ftp.ecn.purdue.edu
 .PHONY:clean cleanAll all ca usa 5x5
 
 all: shortestpath
+	echo " $(wildcard $(patsubst %,$(DEPDIR)/%.d,$(basename $(SOURCES))))"
+
+.SECONDEXPANSION:
+$(OBJTEST): $(TESTDIR)/$$(notdir $$(subst .o,.c,$$@))
+$(OBJTEST): $(TESTDIR)/$$(notdir $$(subst .o,.c,$$@)) $(DEPDIR)/$$(notdir $$(subst .o,.d,$$@))
+	cp $(TESTDIR)/$(notdir $<) $(notdir $<)
+	$(COMPILE.c) -o $@ $(notdir $(subst .o,.c,$@))
+	$(POSTCOMPILE)
+	rm $(notdir $<) > /dev/null
 
 $(ODIR)/%.o: %.c
 $(ODIR)/%.o: %.c $(DEPDIR)/%.d
-	$(COMPILE.c) -o $@ $< $(CFLAGS)
+	$(COMPILE.c) -o $@ $<
 	$(POSTCOMPILE)
 
 shortestpath:$(OBJ)
+	gcc -o $@ $^
+
+pqueuetest:$(ODIR)/utility.o $(ODIR)/priorityqueue.o
 	gcc -o $@ $^
 
 ca:shortestpath $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt
@@ -73,5 +91,4 @@ $(PROVQUERY):
 $(DEPDIR)/%.d: ;
 .PRECIOUS: $(DEPDIR)/%.d
 
-include $(wildcard $(patsubst %,$(DEPDIR)/%.d,$(basename $(CSOURCE))))
-
+include $(wildcard $(patsubst %,$(DEPDIR)/%.d,$(basename $(SOURCES))))
