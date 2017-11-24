@@ -21,7 +21,7 @@ typedef struct _Node{
 	int x;
 	int y;
 	unsigned int edge_count;
-	unsigned int edge_size;
+	unsigned int from;
 	int last_visit;
 	Edge* edges;//TODO chagne to a hash table?
 	int distance;

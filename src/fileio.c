@@ -67,7 +67,7 @@ Graph* readGraph(char* MapName)
 		{
 			fprintf(stderr,"Error with malloc\n");
 		}
-		nodes[i].edge_size = EdgeTempSize;
+		nodes[i].from = EdgeTempSize;
 		nodes[i].edge_count = 0;
 	}
 
@@ -116,10 +116,10 @@ void _SetEdge(Node* nodes,int from,int to)
 	nodes[from].edges[nodes[from].edge_count].distance = -1;
 
 	nodes[from].edge_count += 1;
-	if(nodes[from].edge_count == nodes[from].edge_size)
+	if(nodes[from].edge_count == nodes[from].from)
 	{
-		nodes[from].edges = realloc(nodes[from].edges,(nodes[from].edge_size * EDGEGROWTH + 1) * sizeof(*nodes[from].edges));
-		nodes[from].edge_size = nodes[from].edge_size * EDGEGROWTH + 1;
+		nodes[from].edges = realloc(nodes[from].edges,(nodes[from].from * EDGEGROWTH + 1) * sizeof(*nodes[from].edges));
+		nodes[from].from = nodes[from].from * EDGEGROWTH + 1;
 		if(DEBUG == 1)
 		{
 			printf("resized edge array\n");
@@ -142,6 +142,12 @@ QStruct* initQToken(char* fn,Query** q)
 		return NULL;
 	}
 	rtn -> fp = fopen(fn,"r");
+	if(rtn -> fp == NULL)
+	{
+		fprintf(stderr,"Error opening the query file\n");
+		exit(EXIT_FAILURE);
+	}
+
 	int count = fscanf(rtn -> fp,"%d",&(rtn -> cnt));
 	if(count != 1)
 	{

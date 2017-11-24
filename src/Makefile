@@ -36,11 +36,11 @@ FILE = ftp.ecn.purdue.edu/xzl/inv/ece368-f17/proj3
 SITE = ftp://$(FILE)
 CLEANUP = rm -rf ftp.ecn.purdue.edu
 
+GIVENBINARY = ../shortestpath
 
 .PHONY:clean cleanAll all ca usa 5x5
 
 all: shortestpath
-	echo " $(wildcard $(patsubst %,$(DEPDIR)/%.d,$(basename $(SOURCES))))"
 
 .SECONDEXPANSION:
 $(OBJTEST): $(TESTDIR)/$$(notdir $$(subst .o,.c,$$@))
@@ -70,8 +70,9 @@ ca:shortestpath $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt
 usa:shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/usa10.txt
 	./shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/usa10.txt
 
-5x5:shortestpath ./shortestpath $(MAPDIR)/5x5.txt $(QUERYDIR)/5x5query.txt
-	valgrind ./shortestpath $(MAPDIR)/5x5.txt $(QUERYDIR)/5x5query.txt
+5x5:shortestpath ./shortestpath $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt
+	./shortestpath $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt
+	$(GIVENBINARY) $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt
 
 clean:
 	rm -f *~

@@ -53,7 +53,7 @@ int pop(Heap* heap,data* toSet)
 	return 1;
 }
 
-int addQueue(Heap* heap,int node,int distance)
+int addQueue(Heap* heap,int node,int distance,int from)
 {
 	if(heap -> last == heap -> size)
 	{
@@ -61,9 +61,12 @@ int addQueue(Heap* heap,int node,int distance)
 	}
 	heap -> heap[heap -> last].node = node;
 	heap -> heap[heap -> last].distance = distance;
+	heap -> heap[heap -> last].from = from;
+
+	_upHeap(heap,heap -> last);
+
 	heap -> last += 1;
 
-	_upHeap(heap,heap -> last - 1);
 	return 1;
 }
 
@@ -76,7 +79,6 @@ int popAndReplace(Heap* heap,int node,int distance,data* rtn)
 	return 1;
 }
 
-//TODO test this
 //does down heap on
 void _DownHeap(Heap* heap,int current)
 {

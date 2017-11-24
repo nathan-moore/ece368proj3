@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define CASES 800000
+#define CASES 100000
 
 int intcmp(const void* n1,const void* n2);
 
@@ -20,7 +20,7 @@ int main(void)
 
 	for(int i = 0; i < CASES;i++)
 	{
-		addQueue(h,i,testCase[i]);
+		addQueue(h,i,testCase[i],0);
 	}
 
 	qsort(testCase,CASES,sizeof(*testCase),intcmp);
@@ -40,7 +40,7 @@ int main(void)
 	int bug[] = {1,2,3};
 	for(int i = 0;i < 3;i++)
 	{
-		addQueue(h,i,bug[i]);
+		addQueue(h,i,bug[i],0);
 	}
 
 	for(int i = 0;i < 3;i++)
