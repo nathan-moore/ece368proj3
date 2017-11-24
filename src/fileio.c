@@ -52,9 +52,10 @@ Graph* readGraph(char* MapName)
 		{
 			printf("Error matching node %d. Acual is %d.\n",i,index);
 		}
-		
+
 		nodes[index].x = x_cord;
 		nodes[index].y = y_cord;
+		nodes[index].last_visit = -1;
 	}
 
 	unsigned int EdgeTempSize = (edge_cnt / vertex_cnt + EDGEBUFFER);
@@ -69,7 +70,7 @@ Graph* readGraph(char* MapName)
 		nodes[i].edge_size = EdgeTempSize;
 		nodes[i].edge_count = 0;
 	}
-	
+
 	for(unsigned int i = 0;i < edge_cnt;i++)
 	{
 		int Edge1,Edge2;
@@ -105,7 +106,7 @@ Graph* readGraph(char* MapName)
 	Graph* graph = malloc(sizeof(*graph));
 	graph -> graph = nodes;
 	graph -> nodeCnt = vertex_cnt;
-	
+
 	return graph;
 }
 
@@ -113,7 +114,7 @@ void _SetEdge(Node* nodes,int from,int to)
 {
 	nodes[from].edges[nodes[from].edge_count].index = to;
 	nodes[from].edges[nodes[from].edge_count].distance = -1;
-	
+
 	nodes[from].edge_count += 1;
 	if(nodes[from].edge_count == nodes[from].edge_size)
 	{

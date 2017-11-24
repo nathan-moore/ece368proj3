@@ -1,6 +1,10 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include "utility.h"
+
+typedef struct _Heap Heap;
+
 typedef struct _Node Node;
 
 //stores edge and pointers to both nodes
@@ -19,7 +23,7 @@ typedef struct _Node{
 	unsigned int edge_count;
 	unsigned int edge_size;
 	int last_visit;
-	Edge* edges;
+	Edge* edges;//TODO chagne to a hash table?
 	int distance;
 }Node;
 

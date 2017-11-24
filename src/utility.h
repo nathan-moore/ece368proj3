@@ -1,6 +1,8 @@
 #ifndef UTILITY_HEADER
 #define UTILITY_HEADER
 
+#include <stdbool.h>
+
 #include "graph.h"
 
 typedef struct _data{
