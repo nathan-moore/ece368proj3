@@ -7,7 +7,7 @@
 
 typedef struct _data{
 	unsigned int node;
-	unsigned int distance;
+	double distance;
 	unsigned int from;
 }data;
 
@@ -22,6 +22,7 @@ Heap* pQueueInit(unsigned int size);
 int pop(Heap* heap,data* toSet);
 int addQueue(Heap* Heap,int node, int distance,int from)__attribute__((nonnull));
 int popAndReplace(Heap* heap,int node,int distance,data* rtn)__attribute__((nonnull));
+void printHeap(Heap* heap);
 
 bool static inline isEmpty(Heap* heap)
 {

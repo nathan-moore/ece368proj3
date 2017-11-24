@@ -166,3 +166,12 @@ static inline int _getParent(int child)
 {
 	return child / 2;
 }
+
+void printHeap(Heap* heap)
+{
+	for(int i = 1;i < heap -> last;i++)
+	{
+		printf("%i: %i %lf\n",i,heap -> heap[i].node,heap -> heap[i].distance);
+	}
+
+}

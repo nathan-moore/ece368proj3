@@ -1,5 +1,6 @@
 CC := gcc
 CFLAGS := -Wall -Werror -Wshadow -g
+LINKFLAGS := -lm
 
 ODIR :=../obj
 MAPDIR :=../map
@@ -38,6 +39,8 @@ CLEANUP = rm -rf ftp.ecn.purdue.edu
 
 GIVENBINARY = ../shortestpath
 
+CMPFILES = diff o1.txt o2.txt && rm o1.txt o2.txt
+
 .PHONY:clean cleanAll all ca usa 5x5
 
 all: shortestpath
@@ -56,23 +59,28 @@ $(ODIR)/%.o: %.c $(DEPDIR)/%.d
 	$(POSTCOMPILE)
 
 shortestpath:$(OBJ)
-	gcc -o $@ $^
+	gcc -o $@ $^ $(LINKFLAGS)
 
 pqueuetest:$(ODIR)/utility.o $(ODIR)/priorityqueue.o
-	gcc -o $@ $^
+	gcc -o $@ $^ $(LINKFLAGS)
 
 pqtest2:$(ODIR)/utility.o $(ODIR)/pqtest2.o
-	gcc -o $@ $^
+	gcc -o $@ $^ $(LINKFLAGS)
 
 ca:shortestpath $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt
-	valgrind ./shortestpath $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt
+	./shortestpath $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt > o1.txt
+	$(GIVENBINARY) $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt > o2.txt
+	$(CMPFILES)
 
 usa:shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/usa10.txt
-	./shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/usa10.txt
+	./shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/usa10.txt > o1.txt
+	$(GIVENBINARY) $(MAPDIR)/usa.txt $(QUERYDIR)/usa10.txt > o2.txt
+	$(CMPFILES)
 
 5x5:shortestpath ./shortestpath $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt
-	./shortestpath $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt
-	$(GIVENBINARY) $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt
+	./shortestpath $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt > o1.txt
+	$(GIVENBINARY) $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt > o2.txt
+	$(CMPFILES)
 
 clean:
 	rm -f *~
