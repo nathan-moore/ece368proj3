@@ -72,15 +72,15 @@ ca:shortestpath $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt
 	$(GIVENBINARY) $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt > o2.txt
 	$(CMPFILES)
 
-usa1 usa10 usa100:shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/$$@.txt
+usa1 usa10 usa100 usadb:shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/$$@.txt
 	./shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/$@.txt > o1.txt
 	$(GIVENBINARY) $(MAPDIR)/usa.txt $(QUERYDIR)/$@.txt > o2.txt
 	$(CMPFILES)
 
 5x5:shortestpath ./shortestpath $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt
-	./shortestpath $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt > o1.txt
-	$(GIVENBINARY) $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt > o2.txt
-	$(CMPFILES)
+	./shortestpath $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt #> o1.txt
+#$(GIVENBINARY) $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt > o2.txt
+#$(CMPFILES)
 
 clean:
 	rm -f *~
