@@ -20,6 +20,7 @@ typedef struct _Node{
 	unsigned int edge_size;
 	int last_visit;
 	Edge* edges;
+	int distance;
 }Node;
 
 typedef struct _Graph{
@@ -32,6 +33,6 @@ typedef struct _Query{
 	int finish;
 }Query;
 
-void findPath(Query* query,Graph* graph);
+void findPath(Query* query,Graph* graph,int count,Heap* heap);
 
 #endif

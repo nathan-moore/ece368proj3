@@ -4,8 +4,8 @@
 #include "graph.h"
 
 typedef struct _data{
-	int node;
-	int distance;
+	unsigned int node;
+	unsigned int distance;
 }data;
 
 typedef struct _Heap{
@@ -15,10 +15,14 @@ typedef struct _Heap{
 }Heap;
 
 
-
 Heap* pQueueInit(unsigned int size);
 int pop(Heap* heap,data* toSet);
 int addQueue(Heap* Heap,int node, int distance)__attribute__((nonnull));
 int popAndReplace(Heap* heap,int node,int distance,data* rtn)__attribute__((nonnull));
+
+inline bool isEmpty(Heap* heap)
+{
+	return heap -> last == 1;
+}
 
 #endif
