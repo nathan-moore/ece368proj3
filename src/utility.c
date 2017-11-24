@@ -117,6 +117,12 @@ void _DownHeap(Heap* heap,int current)
 		}
 	}while(flag == true);
 
+	//in the case where there is only one child 
+	if((right_child == heap -> last) && nodeCmp(heap_arr[current],heap_arr[left_child]) >= 0)
+	{
+		_swap(&heap_arr[current],&heap_arr[left_child]);
+	}
+
 	return;
 }
 

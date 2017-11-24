@@ -13,7 +13,7 @@ DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$(notdir $*).Td
 
 HEADERS := graph.h fileio.h utility.h
 CSOURCE := graph.c fileio.c main.c utility.c
-TESTS := priorityqueue.c
+TESTS := priorityqueue.c pqtest2.c
 COBJ := $(CSOURCE:.c=.o)
 OBJ := $(patsubst %,$(ODIR)/%,$(COBJ))
 TEST := $(patsubst %,$(ODIR)/%,$(TESTS))
@@ -59,6 +59,9 @@ shortestpath:$(OBJ)
 	gcc -o $@ $^
 
 pqueuetest:$(ODIR)/utility.o $(ODIR)/priorityqueue.o
+	gcc -o $@ $^
+
+pqtest2:$(ODIR)/utility.o $(ODIR)/pqtest2.o
 	gcc -o $@ $^
 
 ca:shortestpath $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt

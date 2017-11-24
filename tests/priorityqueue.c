@@ -11,11 +11,29 @@ int main(void)
 	for(int i = 0; i < 10;i++)
 	{
 		addQueue(heap,i,distance[i]);
-		printHeap(heap);
-		printf("\n");
+		// printHeap(heap);
+		// printf("\n");
 	}
 
 	for(int i = 0; i < 11;i++)
+	{
+		data returned;
+		pop(heap,&returned);
+		// printHeap(heap);
+		// printf("%i returned %i with node of %i and distance of %i\n",i,error,returned.node,returned.distance);
+		// printf("\n");
+	}
+
+	int que_d[] = {1,1,1,1,6,6,6,6,6,6,6,6,6,6,6,6};
+
+	heap = pQueueInit(16);
+
+	for(int i = 0; i < 16;i++)
+	{
+		addQueue(heap,i,que_d[i]);
+	}
+
+	for(int i = 0; i < 16;i++)
 	{
 		data returned;
 		int error = pop(heap,&returned);
