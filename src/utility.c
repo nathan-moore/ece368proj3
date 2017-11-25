@@ -9,7 +9,7 @@ void _DownHeap(Heap* heap,int current);
 void _upHeap(Heap* heap,int current);
 
 //TODO inline these 5 functions
-static inline int nodeCmp(data node1,data node2);
+static inline double nodeCmp(data node1,data node2);
 static inline int _getLeftChild(int parent);
 static inline int _getRightChild(int parent);
 static inline void _swap(data* n1,data* n2);
@@ -140,7 +140,7 @@ void _upHeap(Heap* heap,int current)
 	}
 }
 
-static inline int nodeCmp(data node1,data node2)
+static inline double nodeCmp(data node1,data node2)
 {
 	return node1.distance - node2.distance;
 }

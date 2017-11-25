@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -Wall -Werror -Wshadow -g
+CFLAGS := -Wall -Werror -Wshadow -O3
 LINKFLAGS := -lm
 
 ODIR :=../obj
@@ -14,7 +14,7 @@ DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$(notdir $*).Td
 
 HEADERS := graph.h fileio.h utility.h
 CSOURCE := graph.c fileio.c main.c utility.c
-TESTS := priorityqueue.c pqtest2.c
+TESTS := priorityqueue.c pqtest2.c walk.c
 COBJ := $(CSOURCE:.c=.o)
 OBJ := $(patsubst %,$(ODIR)/%,$(COBJ))
 TEST := $(patsubst %,$(ODIR)/%,$(TESTS))
@@ -38,8 +38,6 @@ SITE = ftp://$(FILE)
 CLEANUP = rm -rf ftp.ecn.purdue.edu
 
 GIVENBINARY = ../shortestpath
-
-CMPFILES = diff o1.txt o2.txt && rm o1.txt o2.txt
 
 .PHONY:clean cleanAll all ca usa 5x5
 
@@ -70,21 +68,30 @@ pqtest2:$(ODIR)/utility.o $(ODIR)/pqtest2.o
 ca:shortestpath $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt
 	./shortestpath $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt > o1.txt
 	$(GIVENBINARY) $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt > o2.txt
-	$(CMPFILES)
+	./walk $(MAPDIR)/roadCA.txt o1.txt o2.txt
+	rm o1.txt o2.txt
 
-usa1 usa10 usa100 usadb:shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/$$@.txt
+usa1 usa10 usa100 usadb buggy:walk shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/$$@.txt
 	./shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/$@.txt > o1.txt
 	$(GIVENBINARY) $(MAPDIR)/usa.txt $(QUERYDIR)/$@.txt > o2.txt
-	$(CMPFILES)
+	./walk $(MAPDIR)/usa.txt o1.txt o2.txt $(QUERYDIR)/$@.txt
+	rm o1.txt o2.txt
 
-5x5:shortestpath ./shortestpath $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt
-	./shortestpath $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt #> o1.txt
-#$(GIVENBINARY) $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt > o2.txt
-#$(CMPFILES)
+5x5:shortestpath walk $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt
+	./shortestpath $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt > o1.txt
+	$(GIVENBINARY) $(MAPDIR)/map5x5.txt $(QUERYDIR)/query5x5.txt > o2.txt
+	./walk $(MAPDIR)/map5x5.txt o1.txt o2.txt $(QUERYDIR)/query5x5.txt
+	rm o1.txt o2.txt
+
+walk:$(ODIR)/fileio.o $(ODIR)/walk.o
+	gcc -o walk $^ $(LINKFLAGS)
 
 clean:
 	rm -f *~
 	rm -f shortestpath
+	rm -f pqtest2
+	rm -f pqueuetest
+	rm -f walk
 
 cleanAll:clean
 	rm -f $(ODIR)/*
