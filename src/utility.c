@@ -5,15 +5,15 @@
 #include "utility.h"
 #include "graph.h"
 
-void _DownHeap(Heap* heap,int current);
-void _upHeap(Heap* heap,int current);
+void _DownHeap(Heap* heap,unsigned int current);
+void _upHeap(Heap* heap,unsigned int current);
 
 //TODO inline these 5 functions
 static inline double nodeCmp(data node1,data node2);
-static inline int _getLeftChild(int parent);
-static inline int _getRightChild(int parent);
+static inline unsigned int _getLeftChild(unsigned int parent);
+static inline unsigned int _getRightChild(unsigned int parent);
 static inline void _swap(data* n1,data* n2);
-static inline int _getParent(int child);
+static inline unsigned int _getParent(unsigned int child);
 
 Heap* pQueueInit(unsigned int size)
 {
@@ -53,7 +53,7 @@ int pop(Heap* heap,data* toSet)
 	return 1;
 }
 
-int addQueue(Heap* heap,int node,int distance,int from)
+int addQueue(Heap* heap,unsigned int node,double distance,unsigned int from)
 {
 	if(heap -> last == heap -> size)
 	{
@@ -70,7 +70,7 @@ int addQueue(Heap* heap,int node,int distance,int from)
 	return 1;
 }
 
-int popAndReplace(Heap* heap,int node,int distance,data* rtn)
+int popAndReplace(Heap* heap,unsigned int node,int distance,data* rtn)
 {
 	*rtn = heap -> heap[1];
 	heap -> heap[1].node = node;
@@ -80,11 +80,11 @@ int popAndReplace(Heap* heap,int node,int distance,data* rtn)
 }
 
 //does down heap on
-void _DownHeap(Heap* heap,int current)
+void _DownHeap(Heap* heap,unsigned int current)
 {
 	data* heap_arr = heap -> heap;
-	int left_child = _getLeftChild(current);
-	int right_child = _getRightChild(current);
+	unsigned int left_child = _getLeftChild(current);
+	unsigned int right_child = _getRightChild(current);
 	bool flag = false;
 	do
 	{
@@ -92,7 +92,7 @@ void _DownHeap(Heap* heap,int current)
 		//prioritises the left branch first
 		while(right_child < heap -> last && nodeCmp(heap_arr[current],heap_arr[left_child]) >= 0)
 		{
-			int location = nodeCmp(heap_arr[left_child],heap_arr[right_child]);
+			double location = nodeCmp(heap_arr[left_child],heap_arr[right_child]);
 			if(location <= 0)
 			{
 				_swap(&heap_arr[current],&heap_arr[left_child]);
@@ -128,10 +128,10 @@ void _DownHeap(Heap* heap,int current)
 	return;
 }
 
-void _upHeap(Heap* heap,int current)
+void _upHeap(Heap* heap,unsigned int current)
 {
 	data* heap_arr = heap -> heap;
-	int parent = _getParent(current);
+	unsigned int parent = _getParent(current);
 	while(parent >= 1 && (nodeCmp(heap_arr[parent],heap_arr[current]) > 0))
 	{
 		_swap(&heap_arr[parent],&heap_arr[current]);
@@ -145,12 +145,12 @@ static inline double nodeCmp(data node1,data node2)
 	return node1.distance - node2.distance;
 }
 
-static inline int _getLeftChild(int parent)
+static inline unsigned int _getLeftChild(unsigned int parent)
 {
 	return (parent * 2);
 }
 
-static inline int _getRightChild(int parent)
+static inline unsigned int _getRightChild(unsigned int parent)
 {
 	return (parent * 2) + 1;
 }
@@ -162,14 +162,14 @@ static inline void _swap(data* n1,data* n2)
 	*n2 = temp;
 }
 
-static inline int _getParent(int child)
+static inline unsigned int _getParent(unsigned int child)
 {
 	return child / 2;
 }
 
 void printHeap(Heap* heap)
 {
-	for(int i = 1;i < heap -> last;i++)
+	for(unsigned int i = 1;i < heap -> last;i++)
 	{
 		printf("%i: %i %lf\n",i,heap -> heap[i].node,heap -> heap[i].distance);
 	}

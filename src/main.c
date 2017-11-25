@@ -31,6 +31,6 @@ int main(int argc,char** argv)
 			exit(EXIT_FAILURE);
 		}
 
-		findPath(query,graph,i,heap);
+		findPath(query,graph,(int) i,heap);
 	}
 }

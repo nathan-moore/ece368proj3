@@ -28,7 +28,7 @@ int main(int argc,char** argv)
 	q = initQToken(argv[4],&qy);
 	double* l2 = getLength(argv[3],g,q);
 
-	for(int i = 0;i < q -> cnt;i++)
+	for(unsigned int i = 0;i < q -> cnt;i++)
 	{
 		if(l1[i] < 0 || l2[i] < 0)
 		{
@@ -58,7 +58,7 @@ double* getLength(char* name,Graph* g,QStruct* q)
 	Query* query = &q -> q;
 	double* dist = calloc(q -> cnt,sizeof(*dist));
 
-	for(int i = 0; i < q -> cnt;i++)
+	for(unsigned int i = 0; i < q -> cnt;i++)
 	{
 		nextQuery(q);
 		int length;
@@ -117,12 +117,12 @@ double getDist(unsigned int n1,unsigned int n2,Graph* g)
 {
 	double x = pow(g -> graph[n1].x - g -> graph[n2].x,2);
 	double y = pow(g -> graph[n1].y - g -> graph[n2].y,2);
-	return (int) sqrt(x + y);
+	return sqrt(x + y);
 }
 
 int checkEdge(unsigned int n1,unsigned int n2,Graph* g)
 {
-	int i;
+	unsigned int i;
 	for(i = 0;i < g -> graph[n1].edge_count;i++)
 	{
 		if(g -> graph[n1].edges[i].index == n2)

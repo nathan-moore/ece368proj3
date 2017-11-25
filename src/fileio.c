@@ -3,7 +3,7 @@
 #include "graph.h"
 #include "fileio.h"
 
-void _SetEdge(Node* nodes,int from,int to);
+void _SetEdge(Node* nodes,unsigned int from,unsigned int to);
 
 Graph* readGraph(char* MapName)
 {
@@ -13,7 +13,7 @@ Graph* readGraph(char* MapName)
 		return NULL;
 	}
 
-	int vertex_cnt;
+	unsigned int vertex_cnt;
 	int read = fscanf(map,"%i",&vertex_cnt);
 	if(read != 1)
 	{
@@ -28,7 +28,7 @@ Graph* readGraph(char* MapName)
 		return NULL;
 	}
 
-	int edge_cnt;
+	unsigned int edge_cnt;
 	read = fscanf(map,"%i",&edge_cnt);
 	if(read != 1)
 	{
@@ -39,7 +39,8 @@ Graph* readGraph(char* MapName)
 
 	for(unsigned int i = 0; i < vertex_cnt;i++)
 	{
-		int index,x_cord,y_cord;
+		unsigned int index;
+		int x_cord,y_cord;
 		read = fscanf(map,"%i %i %i",&index,&x_cord,&y_cord);
 		if(read != 3)
 		{
@@ -73,7 +74,7 @@ Graph* readGraph(char* MapName)
 
 	for(unsigned int i = 0;i < edge_cnt;i++)
 	{
-		int Edge1,Edge2;
+		unsigned int Edge1,Edge2;
 		read = fscanf(map,"%i %i",&Edge1,&Edge2);
 		if(read != 2)
 		{
@@ -110,7 +111,7 @@ Graph* readGraph(char* MapName)
 	return graph;
 }
 
-void _SetEdge(Node* nodes,int from,int to)
+void _SetEdge(Node* nodes,unsigned int from,unsigned int to)
 {
 	nodes[from].edges[nodes[from].edge_count].index = to;
 	nodes[from].edges[nodes[from].edge_count].distance = -1;
@@ -118,8 +119,9 @@ void _SetEdge(Node* nodes,int from,int to)
 	nodes[from].edge_count += 1;
 	if(nodes[from].edge_count == nodes[from].from)
 	{
-		nodes[from].edges = realloc(nodes[from].edges,(nodes[from].from * EDGEGROWTH + 1) * sizeof(*nodes[from].edges));
-		nodes[from].from = nodes[from].from * EDGEGROWTH + 1;
+		unsigned int size = (unsigned int)(nodes[from].from * EDGEGROWTH + 1);
+		nodes[from].edges = realloc(nodes[from].edges,size * sizeof(*nodes[from].edges));
+		nodes[from].from = size;
 		if(DEBUG == 1)
 		{
 			printf("resized edge array\n");

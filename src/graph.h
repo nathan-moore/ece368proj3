@@ -29,12 +29,12 @@ typedef struct _Node{
 
 typedef struct _Graph{
 	Node* graph;
-	int nodeCnt;
+	unsigned int nodeCnt;
 }Graph;
 
 typedef struct _Query{
-	int start;
-	int finish;
+	unsigned int start;
+	unsigned int finish;
 }Query;
 
 void findPath(Query* query,Graph* graph,int count,Heap* heap);

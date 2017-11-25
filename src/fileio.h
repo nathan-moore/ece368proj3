@@ -13,7 +13,7 @@
 
 typedef struct _QStruct{
 	FILE* fp;
-	int cnt;
+	unsigned int cnt;
 	Query q;
 }QStruct;
 

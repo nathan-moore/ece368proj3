@@ -10,12 +10,12 @@ void _printRoute(Node* graph, unsigned int start);
 void _recPrint(Node* graph,unsigned int start);
 
 static inline double _getDistance(Node* n1,Node* n2);
-static inline void _addEachEdgeNode(int node,double distance,Heap* heap,Node* graph);
+static inline void _addEachEdgeNode(unsigned int node,double distance,Heap* heap,Node* graph);
 
-static inline void _addEachEdgeNode(int node,double distance,Heap* heap,Node* graph)
+static inline void _addEachEdgeNode(unsigned int node,double distance,Heap* heap,Node* graph)
 {
 	Node* from = &graph[node];
-	for(int i = 0;i < from -> edge_count;i++)
+	for(unsigned int i = 0;i < from -> edge_count;i++)
 	{
 		Node* to = &graph[from -> edges[i].index];
 		double ndist = _getDistance(from,to);
