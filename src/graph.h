@@ -24,7 +24,7 @@ typedef struct _Node{
 	unsigned int from;
 	int last_visit;
 	Edge* edges;
-	double distance;
+	//double distance;
 }Node;
 
 typedef struct _Graph{
