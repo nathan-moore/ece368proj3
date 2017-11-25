@@ -9,7 +9,7 @@ void _DownHeap(Heap* heap,unsigned int current);
 void _upHeap(Heap* heap,unsigned int current);
 
 //TODO inline these 5 functions
-static inline double nodeCmp(data node1,data node2);
+static inline int nodeCmp(data node1,data node2);
 static inline unsigned int _getLeftChild(unsigned int parent);
 static inline unsigned int _getRightChild(unsigned int parent);
 static inline void _swap(data* n1,data* n2);
@@ -53,7 +53,7 @@ int pop(Heap* heap,data* toSet)
 	return 1;
 }
 
-int addQueue(Heap* heap,unsigned int node,double distance,unsigned int from)
+int addQueue(Heap* heap,unsigned int node,unsigned int distance,unsigned int from)
 {
 	if(heap -> last == heap -> size)
 	{
@@ -70,7 +70,7 @@ int addQueue(Heap* heap,unsigned int node,double distance,unsigned int from)
 	return 1;
 }
 
-int popAndReplace(Heap* heap,unsigned int node,int distance,data* rtn)
+int popAndReplace(Heap* heap,unsigned int node,unsigned int distance,data* rtn)
 {
 	*rtn = heap -> heap[1];
 	heap -> heap[1].node = node;
@@ -140,9 +140,9 @@ void _upHeap(Heap* heap,unsigned int current)
 	}
 }
 
-static inline double nodeCmp(data node1,data node2)
+static inline int nodeCmp(data node1,data node2)
 {
-	return node1.distance - node2.distance;
+	return (int)node1.distance - (int)node2.distance;
 }
 
 static inline unsigned int _getLeftChild(unsigned int parent)
@@ -171,7 +171,7 @@ void printHeap(Heap* heap)
 {
 	for(unsigned int i = 1;i < heap -> last;i++)
 	{
-		printf("%i: %i %lf\n",i,heap -> heap[i].node,heap -> heap[i].distance);
+		printf("%i: %i %d\n",i,heap -> heap[i].node,heap -> heap[i].distance);
 	}
 
 }

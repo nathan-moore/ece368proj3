@@ -9,16 +9,16 @@
 void _printRoute(Node* graph, unsigned int start);
 void _recPrint(Node* graph,unsigned int start);
 
-static inline double _getDistance(Node* n1,Node* n2);
-static inline void _addEachEdgeNode(unsigned int node,double distance,Heap* heap,Node* graph);
+static inline unsigned int _getDistance(Node* n1,Node* n2);
+static inline void _addEachEdgeNode(unsigned int node,unsigned int distance,Heap* heap,Node* graph);
 
-static inline void _addEachEdgeNode(unsigned int node,double distance,Heap* heap,Node* graph)
+static inline void _addEachEdgeNode(unsigned int node,unsigned int distance,Heap* heap,Node* graph)
 {
 	Node* from = &graph[node];
 	for(unsigned int i = 0;i < from -> edge_count;i++)
 	{
 		Node* to = &graph[from -> edges[i].index];
-		double ndist = _getDistance(from,to);
+		unsigned int ndist = _getDistance(from,to);
 		int error = addQueue(heap,from -> edges[i].index,distance + ndist,node);
 		if(error == 0)
 		{
@@ -28,11 +28,11 @@ static inline void _addEachEdgeNode(unsigned int node,double distance,Heap* heap
 	}
 }
 
-static inline double _getDistance(Node* n1,Node* n2)
+static inline unsigned int _getDistance(Node* n1,Node* n2)
 {
 	double x2 = pow(n1 -> x - n2 -> x,2);
 	double y2 = pow(n1 -> y - n2 -> y,2);
-	return sqrt(x2 + y2);
+	return (unsigned int) sqrt(x2 + y2);
 }
 
 void findPath(Query* query,Graph* graph,int count,Heap* heap)
@@ -52,7 +52,7 @@ void findPath(Query* query,Graph* graph,int count,Heap* heap)
 		{
 			// printf("found the shortest? path\n");
 			// printf("route backwards\n");
-			printf("%.0lf\n",node.distance);
+			printf("%d\n",node.distance);
 
 			network[node.node].from = node.from;
 			_printRoute(network,query -> finish);

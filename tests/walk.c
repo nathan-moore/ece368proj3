@@ -5,8 +5,8 @@
 #include "fileio.h"
 
 int checkEdge(unsigned int n1,unsigned int n2,Graph* g);
-double getDist(unsigned int n1,unsigned int n2,Graph* g);
-double* getLength(char* name,Graph* g,QStruct* q);
+unsigned int getDist(unsigned int n1,unsigned int n2,Graph* g);
+unsigned int* getLength(char* name,Graph* g,QStruct* q);
 
 int main(int argc,char** argv)
 {
@@ -21,21 +21,16 @@ int main(int argc,char** argv)
 	Graph* g = readGraph(argv[1]);
 
 	printf("Check mine\n");
-	double* l1 = getLength(argv[2],g,q);
+	unsigned int* l1 = getLength(argv[2],g,q);
 	freeQuery(q);
 
 	printf("Check their answer\n");
 	q = initQToken(argv[4],&qy);
-	double* l2 = getLength(argv[3],g,q);
+	unsigned int* l2 = getLength(argv[3],g,q);
 
 	for(unsigned int i = 0;i < q -> cnt;i++)
 	{
-		if(l1[i] < 0 || l2[i] < 0)
-		{
-			printf("Invalid distance?\n");
-			return EXIT_FAILURE;
-		}
-		printf("Length 1: %lf, Length 2: %lf\n",l1[i],l2[i]);
+		printf("Length 1: %d, Length 2: %d\n",l1[i],l2[i]);
 
 		if( (int) l1[i] > (int) l2[i])
 		{
@@ -46,7 +41,7 @@ int main(int argc,char** argv)
 	return EXIT_SUCCESS;
 }
 
-double* getLength(char* name,Graph* g,QStruct* q)
+unsigned int* getLength(char* name,Graph* g,QStruct* q)
 {
 	FILE* file = fopen(name,"r");
 	if(file == NULL)
@@ -56,7 +51,7 @@ double* getLength(char* name,Graph* g,QStruct* q)
 	}
 
 	Query* query = &q -> q;
-	double* dist = calloc(q -> cnt,sizeof(*dist));
+	unsigned int* dist = calloc(q -> cnt,sizeof(*dist));
 
 	for(unsigned int i = 0; i < q -> cnt;i++)
 	{
@@ -113,11 +108,11 @@ double* getLength(char* name,Graph* g,QStruct* q)
 	return dist;
 }
 
-double getDist(unsigned int n1,unsigned int n2,Graph* g)
+unsigned int getDist(unsigned int n1,unsigned int n2,Graph* g)
 {
 	double x = pow(g -> graph[n1].x - g -> graph[n2].x,2);
 	double y = pow(g -> graph[n1].y - g -> graph[n2].y,2);
-	return sqrt(x + y);
+	return (unsigned int) sqrt(x + y);
 }
 
 int checkEdge(unsigned int n1,unsigned int n2,Graph* g)
