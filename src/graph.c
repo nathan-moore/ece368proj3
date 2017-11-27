@@ -35,7 +35,7 @@ static inline unsigned int _getDistance(Node* n1,Node* n2)
 	return (unsigned int) sqrt(x2 + y2);
 }
 
-void findPath(Query* query,Graph* graph,int count,Heap* heap)
+void findPath(Query* query,Graph* graph,uint16_t count,Heap* heap)
 {
 	Node* network = graph -> graph;
 
@@ -63,7 +63,7 @@ void findPath(Query* query,Graph* graph,int count,Heap* heap)
 		//if a more efficient path hasn't been found yet
 		if(network[node.node].last_visit != count)
 		{
-			network[node.node].distance	= node.distance;
+			//network[node.node].distance = node.distance;
 			network[node.node].last_visit = count;
 			network[node.node].from = node.from;
 			//TODO addEachEdge

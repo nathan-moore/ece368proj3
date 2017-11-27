@@ -1,6 +1,8 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <stdint.h>
+
 #include "utility.h"
 
 typedef struct _Heap Heap;
@@ -11,32 +13,32 @@ typedef struct _Node Node;
 //done so I only have to calculate distance at most once
 //distance populated upon demand
 typedef struct _Edge{
-	unsigned int index;
-	int distance;
+	uint32_t index;
+	int16_t distance;
 }Edge;
 
 //intersection node
 //stores location and the edges from it
 typedef struct _Node{
-	int x;
-	int y;
-	unsigned int edge_count;
-	unsigned int from;
-	int last_visit;
+    int16_t x;
+	int16_t y;
+    uint32_t edge_count;
+	uint32_t from;
+	uint16_t last_visit;
 	Edge* edges;
-	double distance;
+	//uint16_t distance;
 }Node;
 
 typedef struct _Graph{
 	Node* graph;
-	unsigned int nodeCnt;
+	uint32_t nodeCnt;
 }Graph;
 
 typedef struct _Query{
-	unsigned int start;
-	unsigned int finish;
+	uint32_t start;
+	uint32_t finish;
 }Query;
 
-void findPath(Query* query,Graph* graph,int count,Heap* heap);
+void findPath(Query* query,Graph* graph,uint16_t count,Heap* heap);
 
 #endif
