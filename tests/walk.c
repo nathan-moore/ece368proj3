@@ -120,7 +120,7 @@ int checkEdge(unsigned int n1,unsigned int n2,Graph* g)
 	unsigned int i;
 	for(i = 0;i < g -> graph[n1].edge_count;i++)
 	{
-		if(g -> graph[n1].edges[i].index == n2)
+		if(g -> graph[n1].edges[i] == n2)
 		{
 			break;
 		}
@@ -133,7 +133,7 @@ int checkEdge(unsigned int n1,unsigned int n2,Graph* g)
 
 	for(i = 0;i < g -> graph[n2].edge_count;i++)
 	{
-		if(g -> graph[n2].edges[i].index == n1)
+		if(g -> graph[n2].edges[i] == n1)
 		{
 			return 1;
 		}
