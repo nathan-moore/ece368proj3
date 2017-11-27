@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
+
 #include "graph.h"
 #include "fileio.h"
 
@@ -54,9 +56,14 @@ Graph* readGraph(char* MapName)
 			printf("Error matching node %d. Acual is %d.\n",i,index);
 		}
 
-		nodes[index].x = x_cord;
-		nodes[index].y = y_cord;
-		nodes[index].last_visit = -1;
+		nodes[index].x = (int16_t) x_cord;
+		nodes[index].y = (int16_t) y_cord;
+
+		//make sure assumptions are correct
+		assert(nodes[index].x == x_cord);
+		assert(nodes[index].y == y_cord);
+
+		nodes[index].last_visit = UINT16_MAX;
 	}
 
 	unsigned int EdgeTempSize = (edge_cnt / vertex_cnt + EDGEBUFFER);
@@ -113,8 +120,7 @@ Graph* readGraph(char* MapName)
 
 void _SetEdge(Node* nodes,unsigned int from,unsigned int to)
 {
-	nodes[from].edges[nodes[from].edge_count].index = to;
-	nodes[from].edges[nodes[from].edge_count].distance = -1;
+	nodes[from].edges[nodes[from].edge_count] = to;
 
 	nodes[from].edge_count += 1;
 	if(nodes[from].edge_count == nodes[from].from)

@@ -17,9 +17,9 @@ static inline void _addEachEdgeNode(unsigned int node,unsigned int distance,Heap
 	Node* from = &graph[node];
 	for(unsigned int i = 0;i < from -> edge_count;i++)
 	{
-		Node* to = &graph[from -> edges[i].index];
+		Node* to = &graph[from -> edges[i]];
 		unsigned int ndist = _getDistance(from,to);
-		int error = addQueue(heap,from -> edges[i].index,distance + ndist,node);
+		int error = addQueue(heap,from -> edges[i],distance + ndist,node);
 		if(error == 0)
 		{
 			printf("could not add to queue\n");
@@ -35,7 +35,7 @@ static inline unsigned int _getDistance(Node* n1,Node* n2)
 	return (unsigned int) sqrt(x2 + y2);
 }
 
-void findPath(Query* query,Graph* graph,int count,Heap* heap)
+void findPath(Query* query,Graph* graph,uint16_t count,Heap* heap)
 {
 	Node* network = graph -> graph;
 
@@ -63,7 +63,7 @@ void findPath(Query* query,Graph* graph,int count,Heap* heap)
 		//if a more efficient path hasn't been found yet
 		if(network[node.node].last_visit != count)
 		{
-			//network[node.node].distance	= node.distance;
+			//network[node.node].distance = node.distance;
 			network[node.node].last_visit = count;
 			network[node.node].from = node.from;
 			//TODO addEachEdge
