@@ -14,7 +14,7 @@ typedef struct _Node Node;
 //distance populated upon demand
 typedef struct _Edge{
 	uint32_t index;
-	int16_t distance;
+	//int16_t distance;
 }Edge;
 
 //intersection node
@@ -25,7 +25,7 @@ typedef struct _Node{
     uint32_t edge_count;
 	uint32_t from;
 	uint16_t last_visit;
-	Edge* edges;
+	uint32_t* edges;
 	//uint16_t distance;
 }Node;
 

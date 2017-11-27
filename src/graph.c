@@ -17,9 +17,9 @@ static inline void _addEachEdgeNode(unsigned int node,unsigned int distance,Heap
 	Node* from = &graph[node];
 	for(unsigned int i = 0;i < from -> edge_count;i++)
 	{
-		Node* to = &graph[from -> edges[i].index];
+		Node* to = &graph[from -> edges[i]];
 		unsigned int ndist = _getDistance(from,to);
-		int error = addQueue(heap,from -> edges[i].index,distance + ndist,node);
+		int error = addQueue(heap,from -> edges[i],distance + ndist,node);
 		if(error == 0)
 		{
 			printf("could not add to queue\n");

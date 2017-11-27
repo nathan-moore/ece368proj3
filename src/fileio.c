@@ -120,8 +120,7 @@ Graph* readGraph(char* MapName)
 
 void _SetEdge(Node* nodes,unsigned int from,unsigned int to)
 {
-	nodes[from].edges[nodes[from].edge_count].index = to;
-	nodes[from].edges[nodes[from].edge_count].distance = -1;
+	nodes[from].edges[nodes[from].edge_count] = to;
 
 	nodes[from].edge_count += 1;
 	if(nodes[from].edge_count == nodes[from].from)
