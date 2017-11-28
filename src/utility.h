@@ -22,7 +22,7 @@ Heap* pQueueInit(unsigned int size);
 void peak(Heap* heap,data* toSet);
 void pop(Heap* heap,data* toSet);
 void addQueue(Heap* Heap,unsigned int node, unsigned int distance,unsigned int from)__attribute__((nonnull));
-void popAndReplace(Heap* heap,unsigned int node,unsigned int distance,unsigned int from,data* rtn)__attribute__((nonnull));
+void popAndReplace(Heap* heap,unsigned int node,unsigned int distance,unsigned int from)__attribute__((nonnull));
 void printHeap(Heap* heap);
 void popAndIgnore(Heap* heap);
 

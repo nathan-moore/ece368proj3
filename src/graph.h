@@ -7,10 +7,6 @@
 
 typedef struct _Heap Heap;
 
-//stores edge and pointers to both nodes
-//done so I only have to calculate distance at most once
-//distance populated upon demand
-
 //intersection node
 //stores location and the edges from it
 typedef struct _Node{

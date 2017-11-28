@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -Wall -Werror -Wshadow -Wextra -Wconversion -O3
+CFLAGS := -Wall -Werror -Wshadow -Wextra -O3
 LINKFLAGS := -lm
 
 ODIR :=../obj

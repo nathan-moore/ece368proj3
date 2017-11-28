@@ -54,7 +54,17 @@ void pop(Heap* heap,data* toSet)
 
 void addQueue(Heap* heap,unsigned int node,unsigned int distance,unsigned int from)
 {
-	assert(heap -> last != heap -> size);
+	if(heap -> last == heap -> size)
+	{
+		heap -> heap = realloc(heap -> heap,sizeof(*heap -> heap) * (heap -> size) * 1.5);
+		heap -> size *= 1.5;
+		fprintf(stderr,"Had to resize heap, for better preformance reduce the number of edges in the map");
+		if(heap -> heap == NULL)
+		{
+			fprintf(stderr,"Malloc error, reduce the number of edges in your map\n");
+			exit(EXIT_FAILURE);
+		}
+	}
 
 	heap -> heap[heap -> last].node = node;
 	heap -> heap[heap -> last].distance = distance;
@@ -67,9 +77,8 @@ void addQueue(Heap* heap,unsigned int node,unsigned int distance,unsigned int fr
 	return;
 }
 
-void popAndReplace(Heap* heap,unsigned int node,unsigned int distance,unsigned int from,data* rtn)
+void popAndReplace(Heap* heap,unsigned int node,unsigned int distance,unsigned int from)
 {
-	*rtn = heap -> heap[1];
 	heap -> heap[1].node = node;
 	heap -> heap[1].distance = distance;
 	heap -> heap[1].from = from;
