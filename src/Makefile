@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -Wall -Werror -Wshadow -g	 -Wextra -Wconversion
+CFLAGS := -Wall -Werror -Wshadow -Wextra -Wconversion -O3
 LINKFLAGS := -lm
 
 ODIR :=../obj
@@ -72,8 +72,8 @@ ca:shortestpath $(MAPDIR)/roadCA.txt $(QUERYDIR)/usa10.txt
 	rm o1.txt o2.txt
 
 usa1 usa10 usa100 usadb buggy:walk shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/$$@.txt
-	valgrind ./shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/$@.txt > o1.txt
-	valgrind $(GIVENBINARY) $(MAPDIR)/usa.txt $(QUERYDIR)/$@.txt > o2.txt
+	time ./shortestpath $(MAPDIR)/usa.txt $(QUERYDIR)/$@.txt > o1.txt
+	time $(GIVENBINARY) $(MAPDIR)/usa.txt $(QUERYDIR)/$@.txt > o2.txt
 	./walk $(MAPDIR)/usa.txt o1.txt o2.txt $(QUERYDIR)/$@.txt
 	rm o1.txt o2.txt
 

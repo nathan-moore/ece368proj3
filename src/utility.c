@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <assert.h>
 
 #include "utility.h"
 #include "graph.h"
@@ -38,27 +39,23 @@ Heap* pQueueInit(unsigned int size)
 
 //return 0 if the queue is empy
 //returns 1 on success
-int pop(Heap* heap,data* toSet)
+void pop(Heap* heap,data* toSet)
 {
-	if(heap -> last <= 1)
-	{
-		return 0;
-	}
+	assert(heap -> last > 1);
+
 
 	*toSet = heap -> heap[1];
 	heap -> last -= 1;
 	heap -> heap[1] = heap -> heap[heap -> last];
 
 	_DownHeap(heap,1);
-	return 1;
+	return;
 }
 
-int addQueue(Heap* heap,unsigned int node,unsigned int distance,unsigned int from)
+void addQueue(Heap* heap,unsigned int node,unsigned int distance,unsigned int from)
 {
-	if(heap -> last == heap -> size)
-	{
-		return 0;
-	}
+	assert(heap -> last != heap -> size);
+
 	heap -> heap[heap -> last].node = node;
 	heap -> heap[heap -> last].distance = distance;
 	heap -> heap[heap -> last].from = from;
@@ -67,16 +64,43 @@ int addQueue(Heap* heap,unsigned int node,unsigned int distance,unsigned int fro
 
 	heap -> last += 1;
 
-	return 1;
+	return;
 }
 
-int popAndReplace(Heap* heap,unsigned int node,unsigned int distance,data* rtn)
+void popAndReplace(Heap* heap,unsigned int node,unsigned int distance,unsigned int from,data* rtn)
 {
 	*rtn = heap -> heap[1];
 	heap -> heap[1].node = node;
 	heap -> heap[1].distance = distance;
+	heap -> heap[1].from = from;
 	_DownHeap(heap,1);
-	return 1;
+	return;
+}
+
+void popAndIgnore(Heap* heap)
+{
+	if(heap -> last <= 1)
+	{
+		return;
+	}
+
+	heap -> last -= 1;
+	heap -> heap[1] = heap -> heap[heap -> last];
+
+	_DownHeap(heap,1);
+	return;
+}
+
+void peak(Heap* heap,data* toSet)
+{
+	if(heap -> last <= 1)
+	{
+		return;
+	}
+
+	*toSet = heap -> heap[1];
+
+	return;
 }
 
 //does down heap on
@@ -142,7 +166,7 @@ void _upHeap(Heap* heap,unsigned int current)
 
 static inline int nodeCmp(data node1,data node2)
 {
-	return (int)node1.distance - (int)node2.distance;
+	return (int)node1.distance - (int)	node2.distance;
 }
 
 static inline unsigned int _getLeftChild(unsigned int parent)

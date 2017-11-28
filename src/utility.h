@@ -19,10 +19,12 @@ typedef struct _Heap{
 
 
 Heap* pQueueInit(unsigned int size);
-int pop(Heap* heap,data* toSet);
-int addQueue(Heap* Heap,unsigned int node, unsigned int distance,unsigned int from)__attribute__((nonnull));
-int popAndReplace(Heap* heap,unsigned int node,unsigned int distance,data* rtn)__attribute__((nonnull));
+void peak(Heap* heap,data* toSet);
+void pop(Heap* heap,data* toSet);
+void addQueue(Heap* Heap,unsigned int node, unsigned int distance,unsigned int from)__attribute__((nonnull));
+void popAndReplace(Heap* heap,unsigned int node,unsigned int distance,unsigned int from,data* rtn)__attribute__((nonnull));
 void printHeap(Heap* heap);
+void popAndIgnore(Heap* heap);
 
 static inline bool isEmpty(Heap* heap)
 {

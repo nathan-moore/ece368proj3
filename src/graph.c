@@ -8,22 +8,27 @@
 
 void _printRoute(Node* graph, unsigned int start);
 void _recPrint(Node* graph,unsigned int start);
+void _printInf(Query* query);
 
 static inline unsigned int _getDistance(Node* n1,Node* n2);
-static inline void _addEachEdgeNode(unsigned int node,unsigned int distance,Heap* heap,Node* graph);
+static inline void _addEachEdgeNode(unsigned int node,unsigned int distance,Heap* heap,Node* graph,uint16_t last_visit);
 
-static inline void _addEachEdgeNode(unsigned int node,unsigned int distance,Heap* heap,Node* graph)
+static inline void _addEachEdgeNode(unsigned int node,unsigned int distance,Heap* heap,Node* graph,uint16_t last_visit)
 {
+	data rtn;
 	Node* from = &graph[node];
-	for(unsigned int i = 0;i < from -> edge_count;i++)
+	Node* to = &graph[from -> edges[0]];
+
+	unsigned int ndist = _getDistance(from,to);
+	popAndReplace(heap,from -> edges[0],distance + ndist,node,&rtn);
+
+	for(unsigned int i = 1;i < from -> edge_count;i++)
 	{
-		Node* to = &graph[from -> edges[i]];
-		unsigned int ndist = _getDistance(from,to);
-		int error = addQueue(heap,from -> edges[i],distance + ndist,node);
-		if(error == 0)
+		to = &graph[from -> edges[i]];
+		if(to -> last_visit != last_visit)
 		{
-			printf("could not add to queue\n");
-			exit(EXIT_FAILURE);
+			ndist = _getDistance(from,to);
+			addQueue(heap,from -> edges[i],distance + ndist,node);
 		}
 	}
 }
@@ -39,6 +44,10 @@ void findPath(Query* query,Graph* graph,uint16_t count,Heap* heap)
 {
 	Node* network = graph -> graph;
 
+	if(network[query -> start].edge_count == 0)
+	{
+		_printInf(query);
+	}
 	addQueue(heap,query -> start,0,query -> start);
 
 	while(isEmpty(heap) == false)
@@ -46,7 +55,7 @@ void findPath(Query* query,Graph* graph,uint16_t count,Heap* heap)
 		//printHeap( heap);
 		//printf("\n");
 		data node;
-		pop(heap,&node);
+		peak(heap,&node);
 
 		if (node.node == query -> finish)
 		{
@@ -67,9 +76,14 @@ void findPath(Query* query,Graph* graph,uint16_t count,Heap* heap)
 			network[node.node].last_visit = count;
 			network[node.node].from = node.from;
 			//TODO addEachEdge
-			_addEachEdgeNode(node.node,node.distance,heap,network);
+			_addEachEdgeNode(node.node,node.distance,heap,network,count);
+		}
+		else
+		{
+			popAndIgnore(heap);
 		}
 	}
+	_printInf(query);
 }
 
 //TODO prints backwards
@@ -90,4 +104,10 @@ void _recPrint(Node* graph,unsigned int start)
 	_recPrint(graph,next);
 	printf("%d ",start);
 	return;
+}
+
+void _printInf(Query* query)
+{
+	printf("Infinity\n");
+	printf("%d %d\n",query -> start,query -> finish);
 }
