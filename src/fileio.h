@@ -6,10 +6,10 @@
 
 #include "graph.h"
 
-#define EDGEBUFFER 20
-#define EDGEGROWTH 1.5
+#define EDGEBUFFER 4
+#define EDGEGROWTH 1.7
 
-#define DEBUG 1
+#define DEBUG 0
 
 typedef struct _QStruct{
 	FILE* fp;
